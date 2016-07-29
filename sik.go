@@ -4,6 +4,7 @@ import (
 	"github.com/nsf/termbox-go"
 	"github.com/sparkymat/spartan"
 	"github.com/sparkymat/spartan/direction"
+	"github.com/sparkymat/spartan/gravity"
 	"github.com/sparkymat/spartan/size"
 )
 
@@ -26,16 +27,26 @@ func main() {
 	contentLayout.Width = size.MatchParent
 	contentLayout.Height = size.MatchParent
 
-	helloBox := spartan.TextView{
-		Text: "Hello, World!",
+	statusBar := spartan.LinearLayout{
+		Direction:  direction.Horizontal,
+		IsBordered: false,
 	}
-	helloBox.Width = size.MatchParent
-	helloBox.Height = 1
-	helloBox.ForegroundColor = termbox.ColorWhite | termbox.AttrBold
-	helloBox.BackgroundColor = termbox.Attribute(236) // https://upload.wikimedia.org/wikipedia/en/1/15/Xterm_256color_chart.svg
+	statusBar.Height = 1
+	statusBar.Width = size.MatchParent
+	statusBar.ForegroundColor = termbox.ColorWhite | termbox.AttrBold
+	statusBar.BackgroundColor = termbox.Attribute(236) // https://upload.wikimedia.org/wikipedia/en/1/15/Xterm_256color_chart.svg
+
+	clock := spartan.TextView{
+		Text: "12:00 PM",
+	}
+	clock.Width = 20
+	clock.Height = size.MatchParent
+	clock.LayoutGravity = gravity.Right
+
+	statusBar.AddChild(&clock)
 
 	layout.AddChild(&contentLayout)
-	layout.AddChild(&helloBox)
+	layout.AddChild(&statusBar)
 
 	app.SetContent(&layout)
 	app.Run()
